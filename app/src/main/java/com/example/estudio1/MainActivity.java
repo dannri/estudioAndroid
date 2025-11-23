@@ -1,5 +1,7 @@
 package com.example.estudio1;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayAdapter<String> adapter;
+    private Intent intent;
 
 
 
@@ -73,10 +77,37 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else {
                     Toast.makeText(this, "bobo hijo", Toast.LENGTH_LONG).show();
+                    return true;
                 }
+            case R.id.anadir_Personalizada:
+                intent = new Intent(this, Actividad2.class);
+                try{
+                    startActivityForResult(intent, 1);
+                    return true;
+                }catch (ActivityNotFoundException e ){
+                    Toast.makeText(this, "no puedes cambiar de pantalla", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+    
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            String nombre = data.getStringExtra("nombre");
+            if (nombre != null) {
+                DatosListView.AnadirPersona(nombre);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(this, "Persona añadida: " + nombre, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 }
 

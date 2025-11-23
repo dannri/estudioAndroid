@@ -34,4 +34,9 @@ public class DatosListView {
 
 
     }
+
+    public static void AnadirPersona(String nombre) {
+
+        listaPersonas.add(nombre);
+    }
 }
